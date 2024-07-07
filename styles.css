@@ -1,0 +1,98 @@
+/* styles.css */
+
+/* Aplicar estilos globales */
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Estilos para el contenedor principal */
+.container {
+    max-width: 600px;
+    width: 100%;
+    padding: 15px;
+}
+
+/* Estilos para la tarjeta del formulario de login */
+.card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para el encabezado de la tarjeta */
+.card-header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    border-radius: 5px 5px 0 0;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+/* Estilos para el cuerpo de la tarjeta */
+.card-body {
+    padding: 20px;
+}
+
+/* Estilos para los campos del formulario */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Estilos para las etiquetas de los campos del formulario */
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+/* Estilos para los campos de entrada del formulario */
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Estilos para el botón de enviar */
+.btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+
+/* Estilos responsivos para pantallas pequeñas */
+@media (max-width: 576px) {
+    .card-header {
+        font-size: 1.2em;
+    }
+
+    .btn {
+        font-size: 0.9em;
+    }
+}
