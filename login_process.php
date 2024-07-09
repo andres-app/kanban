@@ -5,14 +5,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
 
-    // Depuración: Verificar que los datos del formulario se están enviando
-    var_dump($username, $password);
+
 
     // Leer el archivo JSON
     $users = json_decode(file_get_contents('users.json'), true);
 
-    // Depuración: Verificar que el JSON se está leyendo correctamente
-    var_dump($users);
+
 
     if (isset($users[$username]) && $users[$username]['password'] === $password) {
         // Credenciales correctas, iniciar sesión
