@@ -68,7 +68,7 @@ function createCardElement(text, assignee) {
     card.draggable = true;
     card.innerHTML = `
         <div>${text}</div>
-        <div class="assignee">${assignee ? 'Asignado a: ' + assignee : ''}</div>
+        <div class="assignee">${assignee ? '<span class="badge bg-success text-white">Asignado: ' + assignee + '</span>' : ''}</div>
         <button class="assign-button" onclick="assignTask(this)">Asignar</button>
     `;
     card.id = generateId();
@@ -81,7 +81,7 @@ function assignTask(button) {
     if (assignee) {
         let card = button.parentElement;
         let assigneeDiv = card.querySelector('.assignee');
-        assigneeDiv.innerText = 'Asignado a: ' + assignee;
+        assigneeDiv.innerHTML = '<span class="badge bg-primary">Asignado a: ' + assignee + '</span>';
         saveCards();
     }
 }
@@ -121,7 +121,7 @@ function saveCards() {
         for (let card of column.children) {
             let cardData = {
                 text: card.children[0].innerText,
-                assignee: card.children[1].innerText.replace('Asignado a: ', '')
+                assignee: card.children[1].innerText.replace('Asignado a: ', '').replace(/<\/?span[^>]*>/g, '') // Remove span tags
             };
             data[columnId].push(cardData);
         }

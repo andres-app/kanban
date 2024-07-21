@@ -1,1 +1,1 @@
-{"todo":[{"text":"tarea nueva","assignee":""}],"inprogress":[{"text":"tarea nueva tiquepos","assignee":"hola"}],"done":[{"text":"Tarea 1","assignee":"Carlos"}]}
+{"todo":[{"text":"tarea nueva","assignee":"Asignado: pedro"},{"text":"hola","assignee":"asas"}],"inprogress":[{"text":"tarea nueva tiquepos","assignee":"Asignado: Asignado: hola"}],"done":[{"text":"Tarea 1","assignee":"Asignado: Asignado: Carlos"}]}

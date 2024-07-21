@@ -7,7 +7,6 @@ if (!isset($_SESSION['username'])) {
     exit();
 }
 
-// Resto del código de index.php
 ?>
 
 <!DOCTYPE html>
@@ -21,7 +20,7 @@ if (!isset($_SESSION['username'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
-    <div class="d-flex" id="wrapper">
+    <div class="d-flex toggled" id="wrapper">
         <!-- Sidebar -->
         <div class="bg-light border-right" id="sidebar-wrapper">
             <div class="sidebar-heading">Proyectos</div>
@@ -63,14 +62,16 @@ if (!isset($_SESSION['username'])) {
     </div>
     <!-- /#wrapper -->
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="kanban.js"></script>
     <script>
-        $("#menu-toggle").click(function(e) {
-            e.preventDefault();
-            $("#wrapper").toggleClass("toggled");
+        $(document).ready(function() {
+            $("#menu-toggle").click(function(e) {
+                e.preventDefault();
+                $("#wrapper").toggleClass("toggled");
+            });
         });
     </script>
 </body>
