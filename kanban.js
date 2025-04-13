@@ -81,7 +81,7 @@ function assignTask(button) {
     if (assignee) {
         let card = button.parentElement;
         let assigneeDiv = card.querySelector('.assignee');
-        assigneeDiv.innerHTML = '<span class="badge bg-primary">Asignado a: ' + assignee + '</span>';
+        assigneeDiv.innerHTML = '<span class="badge bg-warning text-white">Asignado a: ' + assignee + '</span>';
         saveCards();
     }
 }
@@ -121,7 +121,7 @@ function saveCards() {
         for (let card of column.children) {
             let cardData = {
                 text: card.children[0].innerText,
-                assignee: card.children[1].innerText.replace('Asignado a: ', '').replace(/<\/?span[^>]*>/g, '') // Remove span tags
+                assignee: card.children[1].innerText.replace(/Asignado:? ?a?:? /gi, '').trim() // Remove span tags
             };
             data[columnId].push(cardData);
         }
