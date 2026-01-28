@@ -37,7 +37,12 @@ if (!isset($_SESSION['username'])) {
             <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
                 <button class="btn btn-primary" id="menu-toggle">☰</button>
                 <span class="navbar-brand"></span>
-                <button class="btn btn-primary ml-auto" onclick="addCard('todo')">Añadir Tarea</button>
+                <button class="btn btn-success ml-auto mr-2" onclick="openProjectModal()">
+                    <i class="fas fa-folder-plus"></i> Proyecto
+                </button>
+                <button class="btn btn-primary" onclick="addCard('todo')">
+                    <i class="fas fa-plus"></i> Tarea
+                </button>
                 <a href="logout.php" class="btn btn-danger ml-2">
                     <i class="fas fa-sign-out-alt"></i>
                 </a>
@@ -126,6 +131,34 @@ if (!isset($_SESSION['username'])) {
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="projectModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-lg shadow">
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Nuevo proyecto</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nombre del proyecto</label>
+                        <input type="text" class="form-control" id="projectName">
+                    </div>
+                </div>
+
+                <div class="modal-footer border-0">
+                    <button class="btn btn-light" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary" onclick="saveProject()">Guardar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 
 </body>
 

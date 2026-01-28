@@ -44,7 +44,7 @@ let editingCard = null;
 ========================= */
 
 function loadProjects() {
-    fetch('projects.json')
+    fetch('projects.json?v=' + Date.now())
         .then(res => res.json())
         .then(projects => {
             const list = document.getElementById('project-list');
@@ -60,10 +60,11 @@ function loadProjects() {
             });
 
             if (projects.length > 0) {
-                loadKanbanBoard(projects[0].id);
+                loadKanbanBoard(projects[projects.length - 1].id);
             }
         });
 }
+
 
 function updateActiveProject(projectId) {
     document.querySelectorAll('#project-list .list-group-item')
@@ -256,3 +257,53 @@ function saveCards() {
 function generateId() {
     return 'card-' + Math.random().toString(36).substr(2, 9);
 }
+
+function openProjectModal() {
+    document.getElementById('projectName').value = '';
+    $('#projectModal').modal('show');
+}
+
+function saveProject() {
+    const name = document.getElementById('projectName').value.trim();
+    if (!name) {
+        alert('El nombre del proyecto es obligatorio');
+        return;
+    }
+
+    const id = 'project-' + Date.now();
+
+    fetch('projects.json')
+        .then(res => {
+            if (!res.ok) throw new Error('No se pudo leer projects.json');
+            return res.json();
+        })
+        .then(projects => {
+            if (!Array.isArray(projects)) projects = [];
+
+            projects.push({ id, name });
+
+            return fetch('save-projects.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(projects)
+            });
+        })
+        .then(res => {
+            if (!res.ok) throw new Error('No se pudo guardar projects.json');
+
+            return fetch(`save.php?project=${id}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ todo: [], inprogress: [], done: [] })
+            });
+        })
+        .then(() => {
+            $('#projectModal').modal('hide');
+            loadProjects();
+        })
+        .catch(err => {
+            console.error(err);
+            alert('Error creando el proyecto. Revisa consola.');
+        });
+}
+
