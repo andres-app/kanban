@@ -71,13 +71,18 @@ function createCardElement(text, assignee) {
     card.innerHTML = `
         <div class="card-text">${text}</div>
 
-        <div class="assignee">
-            ${assignee
-            ? `<span class="badge badge-warning text-white">Asignado a: ${assignee}</span>`
-            : ''}
+        <div class="card-description text-muted">
+            Sin descripción
         </div>
 
-        <div class="mt-2 d-flex justify-content-between">
+        <div class="assignee">
+            ${assignee
+                ? `<span class="badge badge-warning text-white">Asignado a: ${assignee}</span>`
+                : ''
+            }
+        </div>
+
+        <div class="mt-2">
             <button class="btn btn-sm btn-info" onclick="editTask(this)">
                 <i class="fas fa-edit"></i>
             </button>
@@ -95,6 +100,7 @@ function createCardElement(text, assignee) {
     card.ondragstart = drag;
     return card;
 }
+
 
 function deleteTask(button) {
     if (!confirm("¿Seguro que deseas eliminar esta tarea?")) return;
