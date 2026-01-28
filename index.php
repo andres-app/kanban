@@ -44,15 +44,15 @@ if (!isset($_SESSION['username'])) {
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-4">
-                        <h4>To Do</h4>
+                        <h4>Pendientes</h4>
                         <div class="kanban-cards" id="todo"></div>
                     </div>
                     <div class="col-md-4">
-                        <h4>In Progress</h4>
+                        <h4>En Progreso</h4>
                         <div class="kanban-cards" id="inprogress"></div>
                     </div>
                     <div class="col-md-4">
-                        <h4>Done</h4>
+                        <h4>Terminado</h4>
                         <div class="kanban-cards" id="done"></div>
                     </div>
                 </div>

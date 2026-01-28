@@ -6,43 +6,43 @@ let currentProject = '';
 
 function loadProjects() {
     fetch('projects.json')
-    .then(response => response.json())
-    .then(projects => {
-        const projectList = document.getElementById('project-list');
-        projects.forEach(project => {
-            let projectItem = document.createElement('a');
-            projectItem.className = 'list-group-item list-group-item-action';
-            projectItem.innerText = project.name;
-            projectItem.id = project.id;
-            projectItem.onclick = () => {
-                loadKanbanBoard(project.id);
-            };
-            projectList.appendChild(projectItem);
-        });
+        .then(response => response.json())
+        .then(projects => {
+            const projectList = document.getElementById('project-list');
+            projects.forEach(project => {
+                let projectItem = document.createElement('a');
+                projectItem.className = 'list-group-item list-group-item-action';
+                projectItem.innerText = project.name;
+                projectItem.id = project.id;
+                projectItem.onclick = () => {
+                    loadKanbanBoard(project.id);
+                };
+                projectList.appendChild(projectItem);
+            });
 
-        if (projects.length > 0) {
-            loadKanbanBoard(projects[0].id); // Load the first project by default
-        }
-    });
+            if (projects.length > 0) {
+                loadKanbanBoard(projects[0].id); // Load the first project by default
+            }
+        });
 }
 
 function loadKanbanBoard(projectId) {
     currentProject = projectId;
     fetch(`data-${projectId}.json`)
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('todo').innerHTML = '';
-        document.getElementById('inprogress').innerHTML = '';
-        document.getElementById('done').innerHTML = '';
-        for (let columnId in data) {
-            let column = document.getElementById(columnId);
-            for (let card of data[columnId]) {
-                let cardElement = createCardElement(card.text, card.assignee);
-                column.appendChild(cardElement);
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('todo').innerHTML = '';
+            document.getElementById('inprogress').innerHTML = '';
+            document.getElementById('done').innerHTML = '';
+            for (let columnId in data) {
+                let column = document.getElementById(columnId);
+                for (let card of data[columnId]) {
+                    let cardElement = createCardElement(card.text, card.assignee);
+                    column.appendChild(cardElement);
+                }
             }
-        }
-        updateActiveProject(projectId);
-    });
+            updateActiveProject(projectId);
+        });
 }
 
 function updateActiveProject(projectId) {
@@ -66,25 +66,74 @@ function createCardElement(text, assignee) {
     let card = document.createElement('div');
     card.className = 'kanban-card';
     card.draggable = true;
-    card.innerHTML = `
-        <div>${text}</div>
-        <div class="assignee">${assignee ? '<span class="badge bg-success text-white">Asignado: ' + assignee + '</span>' : ''}</div>
-        <button class="assign-button" onclick="assignTask(this)">Asignar</button>
-    `;
     card.id = generateId();
+
+    card.innerHTML = `
+        <div class="card-text">${text}</div>
+
+        <div class="assignee">
+            ${assignee
+            ? `<span class="badge badge-warning text-white">Asignado a: ${assignee}</span>`
+            : ''}
+        </div>
+
+        <div class="mt-2 d-flex justify-content-between">
+            <button class="btn btn-sm btn-info" onclick="editTask(this)">
+                <i class="fas fa-edit"></i>
+            </button>
+
+            <button class="btn btn-sm btn-secondary" onclick="assignTask(this)">
+                <i class="fas fa-user"></i>
+            </button>
+
+            <button class="btn btn-sm btn-danger" onclick="deleteTask(this)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    `;
+
     card.ondragstart = drag;
     return card;
 }
 
-function assignTask(button) {
-    let assignee = prompt("Ingrese el nombre de la persona asignada:");
-    if (assignee) {
-        let card = button.parentElement;
-        let assigneeDiv = card.querySelector('.assignee');
-        assigneeDiv.innerHTML = '<span class="badge bg-warning text-white">Asignado a: ' + assignee + '</span>';
+function deleteTask(button) {
+    if (!confirm("¿Seguro que deseas eliminar esta tarea?")) return;
+
+    let card = button.closest('.kanban-card');
+    card.remove();
+    saveCards();
+}
+
+
+function editTask(button) {
+    let card = button.closest('.kanban-card');
+    let textDiv = card.querySelector('.card-text');
+
+    let nuevoTexto = prompt("Editar descripción de la tarea:", textDiv.innerText);
+
+    if (nuevoTexto !== null && nuevoTexto.trim() !== '') {
+        textDiv.innerText = nuevoTexto.trim();
         saveCards();
     }
 }
+
+
+function assignTask(button) {
+    let assignee = prompt("Ingrese el nombre de la persona asignada:");
+    if (!assignee) return;
+
+    let card = button.closest('.kanban-card'); // ✅ CORRECTO
+    let assigneeDiv = card.querySelector('.assignee');
+
+    assigneeDiv.innerHTML = `
+        <span class="badge badge-warning text-white">
+            Asignado a: ${assignee}
+        </span>
+    `;
+
+    saveCards();
+}
+
 
 function allowDrop(ev) {
     ev.preventDefault();
@@ -98,7 +147,7 @@ function drop(ev) {
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
     var card = document.getElementById(data);
-    
+
     if (ev.target.className.includes('kanban-cards')) {
         ev.target.appendChild(card);
         saveCards();
@@ -120,8 +169,10 @@ function saveCards() {
         let columnId = column.id;
         for (let card of column.children) {
             let cardData = {
-                text: card.children[0].innerText,
-                assignee: card.children[1].innerText.replace(/Asignado:? ?a?:? /gi, '').trim() // Remove span tags
+                text: card.querySelector('.card-text').innerText,
+                assignee: card.querySelector('.assignee').innerText
+                    .replace(/Asignado:? ?a?:? /gi, '')
+                    .trim()
             };
             data[columnId].push(cardData);
         }
