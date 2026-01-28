@@ -11,6 +11,7 @@ if (!isset($_SESSION['username'])) {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,6 +20,7 @@ if (!isset($_SESSION['username'])) {
     <link rel="stylesheet" href="kanban.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
+
 <body>
     <div class="d-flex toggled" id="wrapper">
         <!-- Sidebar -->
@@ -74,5 +76,57 @@ if (!isset($_SESSION['username'])) {
             });
         });
     </script>
+
+    <!-- =========================
+     MODAL TAREA
+========================= -->
+    <div class="modal fade" id="taskModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content rounded-lg shadow">
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="taskModalTitle">Nueva tarea</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="taskForm">
+
+                        <div class="form-group">
+                            <label>Título</label>
+                            <input type="text" class="form-control" id="taskTitle" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Descripción</label>
+                            <textarea class="form-control" id="taskDescription" rows="3"
+                                placeholder="Opcional"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Asignado a</label>
+                            <input type="text" class="form-control" id="taskAssignee"
+                                placeholder="Opcional">
+                        </div>
+
+                    </form>
+                </div>
+
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-light" data-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button type="button" class="btn btn-primary" id="saveTaskBtn">
+                        Guardar
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 </body>
+
 </html>

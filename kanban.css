@@ -74,12 +74,17 @@ body {
 ========================= */
 
 .kanban-cards {
-    min-height: 170px;
-    background-color: #f5f5f7;
+    background-color: #f9f9fb; /* ligeramente distinto al body */
     border-radius: 22px;
-    padding: 16px;
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.06);
+    padding: 18px;
+
+    border: 1px solid rgba(0,0,0,0.08);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.8);
 }
+
+
 
 /* =========================
    CARD (GRID REAL Y LIMPIO)
@@ -87,23 +92,30 @@ body {
 
 .kanban-card {
     background: #ffffff;
-    margin: 12px 0;
-    padding: 12px 16px;
     border-radius: 20px;
-    border: 1px solid rgba(0,0,0,0.04);
+    padding: 14px 18px;
+    margin: 14px 0;
+
+    border: 1px solid rgba(0,0,0,0.06);
     box-shadow:
-        0 4px 10px rgba(0,0,0,0.05),
-        0 1px 2px rgba(0,0,0,0.06);
-    transition: all 0.25s ease;
+        0 6px 16px rgba(0,0,0,0.08),
+        0 1px 3px rgba(0,0,0,0.05);
 
     display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 16px;
+    grid-template-columns: 1fr auto; /* 👈 izquierda contenido / derecha botones */
+    column-gap: 16px;
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
 
 .kanban-card:hover {
     transform: translateY(-2px);
+    box-shadow:
+        0 10px 24px rgba(0,0,0,0.12),
+        0 2px 6px rgba(0,0,0,0.06);
 }
+
 
 /* =========================
    CONTENIDO IZQUIERDO
@@ -112,28 +124,31 @@ body {
 .card-text {
     font-size: 15px;
     font-weight: 600;
-    margin-bottom: 2px;
+    color: #1c1c1e;
 }
 
 .card-description {
     font-size: 13px;
-    color: #8e8e93; /* gris iOS */
-    line-height: 1.4;
-    margin: 0 0 6px 0;
-}
-
-.assignee {
+    color: #8e8e93;
     margin-top: 2px;
 }
 
-.assignee .badge {
-    background: rgba(44, 204, 42, 0.8);
-    color: #5c4500;
-    font-weight: 600;
-    font-size: 10.5px;
-    padding: 3px 8px;
-    border-radius: 999px;
+
+.assignee {
+    margin-top: 10px;
 }
+
+.assignee .badge {
+    background-color: #34c759;        /* verde iOS sólido */
+    color: #ffffff;                   /* texto blanco real */
+    font-weight: 600;
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    letter-spacing: 0.2px;
+    box-shadow: 0 2px 6px rgba(52,199,89,0.35);
+}
+
 
 /* 🔑 FORZAR TODO EL TEXTO A LA COLUMNA IZQUIERDA */
 .kanban-card > .card-text,
@@ -149,27 +164,30 @@ body {
 .kanban-card .mt-2 {
     grid-column: 2;
     display: flex;
-    gap: 8px;
-    align-self: flex-start;
-    margin-top: 2px;
+    gap: 10px;
+    align-self: center;   /* 👈 centra verticalmente */
 }
+
 
 /* Botón base */
 .kanban-card button {
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     border: none;
-    background: rgba(0,0,0,0.06);
+
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
+
+    background: rgba(0,0,0,0.06);
+    transition: transform 0.15s ease, background 0.15s ease;
 }
 
 .kanban-card button:hover {
     transform: scale(1.1);
 }
+
 
 /* Colores */
 .btn-info { background: rgba(0,122,255,0.18); }
