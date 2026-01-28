@@ -22,6 +22,7 @@ if (!isset($_SESSION['username'])) {
 </head>
 
 <body>
+    <div id="sidebar-overlay"></div>
     <div class="d-flex toggled" id="wrapper">
         <!-- Sidebar -->
         <div class="bg-light border-right" id="sidebar-wrapper">
@@ -49,16 +50,18 @@ if (!isset($_SESSION['username'])) {
             </nav>
 
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-4">
+                <div class="row kanban-row flex-nowrap flex-md-wrap">
+                    <div class="col-12 col-md-6 col-lg-4 kanban-col">
                         <h4>Pendientes</h4>
                         <div class="kanban-cards" id="todo"></div>
                     </div>
-                    <div class="col-md-4">
+
+                    <div class="col-12 col-md-6 col-lg-4 kanban-col">
                         <h4>En Progreso</h4>
                         <div class="kanban-cards" id="inprogress"></div>
                     </div>
-                    <div class="col-md-4">
+
+                    <div class="col-12 col-md-6 col-lg-4 kanban-col">
                         <h4>Terminado</h4>
                         <div class="kanban-cards" id="done"></div>
                     </div>
@@ -75,12 +78,19 @@ if (!isset($_SESSION['username'])) {
     <script src="kanban.js"></script>
     <script>
         $(document).ready(function() {
-            $("#menu-toggle").click(function(e) {
+
+            $("#menu-toggle").on("click", function(e) {
                 e.preventDefault();
                 $("#wrapper").toggleClass("toggled");
             });
+
+            $("#sidebar-overlay").on("click", function() {
+                $("#wrapper").removeClass("toggled");
+            });
+
         });
     </script>
+
 
     <!-- =========================
      MODAL TAREA

@@ -325,3 +325,63 @@ h4 {
     pointer-events: none;
 }
 
+/* =========================
+   RESPONSIVE
+========================= */
+
+/* Tablets */
+@media (max-width: 991px) {
+    #page-content-wrapper {
+        width: 100%;
+        padding: 16px;
+    }
+
+    .kanban-cards {
+        height: 55vh;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+
+    /* 🔑 ROMPER FLEX EN MOBILE */
+    #wrapper {
+        display: block;
+    }
+
+    /* SIDEBAR */
+    #sidebar-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 260px;
+        height: 100%;
+        margin-left: -260px;
+        z-index: 1051;
+        transition: margin-left 0.3s ease;
+        background: #fff;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        margin-left: 0;
+    }
+
+    /* CONTENT SIEMPRE FULL */
+    #page-content-wrapper {
+        width: 100%;
+        padding: 16px;
+    }
+
+    /* OVERLAY */
+    #sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.45);
+        z-index: 1050;
+    }
+
+    #wrapper.toggled #sidebar-overlay {
+        display: block;
+    }
+}
