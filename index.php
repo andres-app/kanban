@@ -43,7 +43,7 @@ if (!isset($_SESSION['username'])) {
 
         <!-- Page Content -->
         <div id="page-content-wrapper">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <nav class="navbar navbar-light bg-light border-bottom fixed-top kanban-navbar">
                 <button class="btn btn-primary" id="menu-toggle">☰</button>
                 <span class="navbar-brand"></span>
                 <button class="btn btn-success ml-auto mr-2" onclick="openProjectModal()">
