@@ -23,10 +23,18 @@ if (!isset($_SESSION['username'])) {
 
 <body>
     <div id="sidebar-overlay"></div>
-    <div class="d-flex toggled" id="wrapper">
+    <div id="wrapper">
         <!-- Sidebar -->
         <div class="bg-light border-right" id="sidebar-wrapper">
-            <div class="sidebar-heading">Proyectos</div>
+            <div class="sidebar-heading d-flex align-items-center justify-content-between">
+                <span>Proyectos</span>
+
+                <!-- BOTÓN CERRAR (SOLO MOBILE) -->
+                <button class="btn btn-sm btn-light d-md-none" id="sidebar-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
             <div class="list-group list-group-flush" id="project-list">
                 <!-- Projects will be loaded here dynamically -->
             </div>

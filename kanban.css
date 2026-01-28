@@ -11,29 +11,6 @@ body {
     color: #1c1c1e;
 }
 
-#wrapper {
-    display: flex;
-    width: 100%;
-}
-
-/* =========================
-   SIDEBAR
-========================= */
-
-#wrapper.toggled #sidebar-wrapper {
-    margin-left: 0;
-}
-
-#sidebar-wrapper {
-    min-height: 100vh;
-    width: 260px;
-    margin-left: -260px;
-    transition: all 0.4s ease;
-    background-color: #ffffff;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    border-right: 1px solid rgba(0,0,0,0.05);
-}
-
 #sidebar-wrapper .sidebar-heading {
     padding: 18px;
     font-size: 18px;
@@ -344,29 +321,27 @@ h4 {
 /* Mobile */
 @media (max-width: 767px) {
 
-    /* 🔑 ROMPER FLEX EN MOBILE */
+    /* WRAPPER */
     #wrapper {
-        display: block;
+        position: relative;
     }
 
-    /* SIDEBAR */
+    /* SIDEBAR OFF-CANVAS */
     #sidebar-wrapper {
         position: fixed;
         top: 0;
         left: 0;
-        width: 260px;
         height: 100%;
-        margin-left: -260px;
+        transform: translateX(-100%);
         z-index: 1051;
-        transition: margin-left 0.3s ease;
-        background: #fff;
     }
 
+    /* CUANDO SE ABRE */
     #wrapper.toggled #sidebar-wrapper {
-        margin-left: 0;
+        transform: translateX(0);
     }
 
-    /* CONTENT SIEMPRE FULL */
+    /* CONTENT FULL */
     #page-content-wrapper {
         width: 100%;
         padding: 16px;
@@ -384,4 +359,37 @@ h4 {
     #wrapper.toggled #sidebar-overlay {
         display: block;
     }
+}
+
+
+/* =========================
+   LAYOUT BASE
+========================= */
+
+#wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* SIDEBAR DESKTOP */
+#sidebar-wrapper {
+    width: 260px;
+    background: #fff;
+    transition: transform 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* CONTENT */
+#page-content-wrapper {
+    flex: 1;
+    padding: 24px;
+}
+
+#sidebar-close {
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

@@ -389,3 +389,8 @@ function highlightActiveProject() {
 
     if (active) active.classList.add('active');
 }
+
+$("#sidebar-close").on("click", function () {
+    $("#wrapper").removeClass("toggled");
+});
+
