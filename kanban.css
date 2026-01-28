@@ -209,3 +209,119 @@ h4 {
     font-size: 17px;
     margin-bottom: 14px;
 }
+
+/* =========================
+   PROYECTO FLIP 3D
+========================= */
+
+.project-flip {
+    perspective: 1000px;
+    margin: 6px 10px;
+}
+
+.project-card {
+    position: relative;
+    width: 100%;
+    height: 48px;
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease;
+    cursor: pointer;
+}
+
+/* Hover → gira */
+.project-flip:hover .project-card {
+    transform: rotateY(180deg);
+}
+
+/* Caras */
+.project-front,
+.project-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 14px;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+/* Frente */
+.project-front {
+    font-weight: 600;
+    color: #1c1c1e;
+}
+
+/* Atrás */
+.project-back {
+    transform: rotateY(180deg);
+    gap: 8px;
+    justify-content: center;
+}
+
+/* =========================
+   PROYECTOS LISTA UX
+========================= */
+
+.project-item {
+    position: relative;
+    padding: 12px 14px;
+    border-radius: 12px;
+    margin: 6px 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: #fff;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+/* Proyecto activo */
+.project-item.active {
+    background: rgba(0,122,255,0.18);
+    font-weight: 600;
+}
+
+/* Nombre */
+.project-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: opacity 0.2s ease;
+}
+
+/* Botón ... */
+.project-menu {
+    border: none;
+    background: transparent;
+    color: #8e8e93;
+    font-size: 14px;
+    margin-left: 8px;
+}
+
+/* Acciones (ya no absolute) */
+.project-actions {
+    display: none;
+    gap: 8px;
+}
+
+/* Mostrar acciones */
+.project-item.show-actions .project-actions {
+    display: flex;
+}
+
+/* Ocultar nombre cuando hay acciones */
+.project-item.show-actions .project-name,
+.project-item.show-actions .project-menu {
+    opacity: 0;
+    pointer-events: none;
+}
+

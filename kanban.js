@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 let currentProject = '';
 let currentColumn = null;
 let editingCard = null;
+let activeProjectId = null;
 
 /* =========================
    PROYECTOS
@@ -51,19 +52,56 @@ function loadProjects() {
             list.innerHTML = '';
 
             projects.forEach(project => {
-                const item = document.createElement('a');
-                item.className = 'list-group-item list-group-item-action';
-                item.textContent = project.name;
-                item.id = project.id;
-                item.onclick = () => loadKanbanBoard(project.id);
+                const item = document.createElement('div');
+                item.className = 'project-item';
+                item.dataset.id = project.id;
+
+                if (project.id === activeProjectId) {
+                    item.classList.add('active');
+                }
+
+                item.innerHTML = `
+                    <span class="project-name">${project.name}</span>
+                    <button class="project-menu" title="Opciones">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </button>
+
+                    <div class="project-actions">
+                        <button class="btn btn-sm btn-danger"
+                            onclick="deleteProject('${project.id}')">
+                            Eliminar
+                        </button>
+                        <button class="btn btn-sm btn-light"
+                            onclick="closeActions(this)">
+                            Cancelar
+                        </button>
+                    </div>
+                `;
+
+                // seleccionar proyecto
+                item.querySelector('.project-name').onclick = () => {
+                    activeProjectId = project.id;
+                    loadKanbanBoard(project.id);
+                    highlightActiveProject();
+                };
+
+                // mostrar acciones
+                item.querySelector('.project-menu').onclick = (e) => {
+                    e.stopPropagation();
+                    toggleActions(item);
+                };
+
                 list.appendChild(item);
             });
-
-            if (projects.length > 0) {
-                loadKanbanBoard(projects[projects.length - 1].id);
-            }
         });
 }
+
+function closeFlip(btn) {
+    const card = btn.closest('.project-card');
+    card.style.transform = 'rotateY(0deg)';
+}
+
+
 
 
 function updateActiveProject(projectId) {
@@ -157,9 +195,9 @@ function createCardElement(text, assignee = '', description = 'Sin descripción'
 
         <div class="assignee">
             ${assignee
-                ? `<span class="badge badge-warning text-white">Asignado a: ${assignee}</span>`
-                : ''
-            }
+            ? `<span class="badge badge-warning text-white">Asignado a: ${assignee}</span>`
+            : ''
+        }
         </div>
 
         <div class="mt-2">
@@ -307,3 +345,47 @@ function saveProject() {
         });
 }
 
+function deleteProject(projectId) {
+    if (!confirm('¿Eliminar este proyecto y todas sus tareas?')) return;
+
+    fetch('projects.json?v=' + Date.now())
+        .then(res => res.json())
+        .then(projects => {
+            const filtered = projects.filter(p => p.id !== projectId);
+
+            return fetch('save-projects.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(filtered)
+            });
+        })
+        .then(() => {
+            return fetch(`delete-project.php?project=${projectId}`);
+        })
+        .then(() => {
+            currentProject = '';
+            loadProjects();
+        });
+}
+
+function toggleActions(item) {
+    document.querySelectorAll('.project-item')
+        .forEach(i => i.classList.remove('show-actions'));
+
+    item.classList.add('show-actions');
+}
+
+function closeActions(btn) {
+    btn.closest('.project-item').classList.remove('show-actions');
+}
+
+function highlightActiveProject() {
+    document.querySelectorAll('.project-item')
+        .forEach(i => i.classList.remove('active'));
+
+    const active = document.querySelector(
+        `.project-item[data-id="${activeProjectId}"]`
+    );
+
+    if (active) active.classList.add('active');
+}
