@@ -122,9 +122,14 @@ function addCard(columnId) {
     editingCard = null;
 
     document.getElementById('taskModalTitle').innerText = 'Nueva tarea';
-    document.getElementById('taskForm').reset();
+
+    document.getElementById('taskTitle').value = '';
+    document.getElementById('taskDescription').value = '';
+    document.getElementById('taskAssignee').value = '';
+
     $('#taskModal').modal('show');
 }
+
 
 function editTask(button) {
     editingCard = button.closest('.kanban-card');

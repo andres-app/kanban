@@ -133,42 +133,40 @@ if (!isset($_SESSION['username'])) {
 
     <!-- =========================
      MODAL TAREA
-========================= -->
-    <div class="modal fade" id="taskModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content rounded-lg shadow">
+    ========================= -->
+    <div class="modal fade" id="taskModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-md">
+            <div class="modal-content rounded-4 shadow">
 
-                <div class="modal-header border-0">
+                <div class="modal-header">
                     <h5 class="modal-title" id="taskModalTitle">Nueva tarea</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
                 <div class="modal-body">
-                    <form id="taskForm">
 
-                        <div class="form-group">
-                            <label>Título</label>
-                            <input type="text" class="form-control" id="taskTitle" required>
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Título</label>
+                        <input type="text" class="form-control" id="taskTitle">
+                    </div>
 
-                        <div class="form-group">
-                            <label>Descripción</label>
-                            <textarea class="form-control" id="taskDescription" rows="3"
-                                placeholder="Opcional"></textarea>
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <textarea class="form-control" id="taskDescription" rows="3"
+                            placeholder="Opcional"></textarea>
+                    </div>
 
-                        <div class="form-group">
-                            <label>Asignado a</label>
-                            <input type="text" class="form-control" id="taskAssignee"
-                                placeholder="Opcional">
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Asignado a</label>
+                        <input type="text" class="form-control" id="taskAssignee"
+                            placeholder="Opcional">
+                    </div>
 
-                    </form>
                 </div>
 
-                <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                    Cancelar
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                        Cancelar
                     </button>
                     <button type="button" class="btn btn-primary" id="saveTaskBtn">
                         Guardar
@@ -179,17 +177,14 @@ if (!isset($_SESSION['username'])) {
         </div>
     </div>
 
+
     <div class="modal fade" id="projectModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content rounded-lg shadow">
-
-                <div class="modal-header border-0">
+                <div class="modal-header">
                     <h5 class="modal-title">Nuevo proyecto</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    <span>&times;</span>
-                    </button>
                 </div>
-
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Nombre del proyecto</label>
