@@ -52,9 +52,12 @@ if (!isset($_SESSION['username'])) {
             <nav class="navbar navbar-light bg-light border-bottom kanban-navbar">
 
                 <!-- BOTÓN MENÚ -->
-                <button class="btn btn-primary" id="menu-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
+                <button
+    class="btn btn-primary d-flex align-items-center justify-content-center kanban-menu-btn"
+    id="menu-toggle">
+    <i class="fas fa-bars"></i>
+</button>
+
 
                 <!-- ESPACIO / BRAND (opcional) -->
                 <span class="navbar-brand d-none d-md-inline"></span>

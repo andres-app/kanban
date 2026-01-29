@@ -355,4 +355,27 @@ h4 {
     position: sticky;
     top: 0;
     z-index: 1040;
+
+    height: 64px;
+    background: #ffffff;
+
+    display: flex;
+    align-items: center;
+
+    margin: 12px;              /* 👈 separa del borde */
+    border-radius: 16px;       /* 👈 REDONDEADO */
+    
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+
+.kanban-menu-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+
+    margin-left: 8px;   /* 👈 separa del borde izquierdo */
+    margin-right: 12px; /* 👈 aire hacia el contenido */
+
+    padding: 0;
 }
