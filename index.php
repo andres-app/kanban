@@ -43,21 +43,41 @@ if (!isset($_SESSION['username'])) {
 
         <!-- Page Content -->
         <div id="page-content-wrapper">
-            <nav class="navbar navbar-light bg-light border-bottom fixed-top kanban-navbar">
-                <button class="btn btn-primary" id="menu-toggle">☰</button>
-                <span class="navbar-brand"></span>
-                <button class="btn btn-success ml-auto mr-2" onclick="openProjectModal()">
-                    <i class="fas fa-folder-plus"></i> Proyecto
+            <nav class="navbar navbar-light bg-light border-bottom kanban-navbar">
+
+                <!-- BOTÓN MENÚ -->
+                <button class="btn btn-primary" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
                 </button>
-                <button class="btn btn-primary" onclick="addCard('todo')">
-                    <i class="fas fa-plus"></i> Tarea
-                </button>
-                <a href="logout.php" class="btn btn-danger ml-2">
-                    <i class="fas fa-sign-out-alt"></i>
-                </a>
+
+                <!-- ESPACIO / BRAND (opcional) -->
+                <span class="navbar-brand d-none d-md-inline"></span>
+
+                <!-- ACCIONES DERECHA -->
+                <div class="navbar-actions ml-auto">
+
+                    <!-- NUEVO PROYECTO -->
+                    <button class="btn btn-success" onclick="openProjectModal()">
+                        <i class="fas fa-folder-plus"></i>
+                        <span class="d-none d-md-inline">Proyecto</span>
+                    </button>
+
+                    <!-- NUEVA TAREA -->
+                    <button class="btn btn-primary" onclick="addCard('todo')">
+                        <i class="fas fa-plus"></i>
+                        <span class="d-none d-md-inline">Tarea</span>
+                    </button>
+
+                    <!-- LOGOUT -->
+                    <a href="logout.php" class="btn btn-danger">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
+
+                </div>
             </nav>
 
-            <div class="container-fluid">
+
+            <div class="container-fluid mt-4">
                 <div class="row kanban-row flex-nowrap flex-md-wrap">
                     <div class="col-12 col-md-6 col-lg-4 kanban-col">
                         <h4>Pendientes</h4>
