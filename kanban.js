@@ -1,62 +1,34 @@
+// =========================
+// INIT
+// =========================
+
 document.addEventListener('DOMContentLoaded', () => {
     loadProjects();
 
-    document.getElementById('saveTaskBtn').addEventListener('click', () => {
-        const title = document.getElementById('taskTitle').value.trim();
-        const description = document.getElementById('taskDescription').value.trim();
-        const assignee = document.getElementById('taskAssignee').value.trim();
-
-        if (!title) {
-            alert('El título es obligatorio');
-            return;
-        }
-
-        if (editingCard) {
-            editingCard.querySelector('.card-text').innerText = title;
-            editingCard.querySelector('.card-description').innerText =
-                description || 'Sin descripción';
-
-            editingCard.querySelector('.assignee').innerHTML =
-                assignee
-                    ? `<span class="badge badge-warning text-white">Asignado a: ${assignee}</span>`
-                    : '';
-        } else {
-            const card = createCardElement(title, assignee, description);
-            document.getElementById(currentColumn).appendChild(card);
-        }
-
-        $('#taskModal').modal('hide');
-        saveCards();
-    });
+    document.getElementById('saveTaskBtn').addEventListener('click', saveTaskFromModal);
 });
 
+// =========================
+// VARIABLES GLOBALES
+// =========================
 
-/* =========================
-   VARIABLES GLOBALES
-========================= */
-
-let currentProject = '';
+let activeProjectId = null;
 let currentColumn = null;
 let editingCard = null;
-let activeProjectId = null;
 
-/* =========================
-   PROYECTOS
-========================= */
+// =========================
+// PROYECTOS
+// =========================
 
 function loadProjects() {
     fetch('projects.json?v=' + Date.now())
         .then(res => res.json())
         .then(projects => {
-
             const list = document.getElementById('project-list');
             list.innerHTML = '';
 
-            if (projects.length === 0) {
-                return; // no hay proyectos
-            }
+            if (!projects || projects.length === 0) return;
 
-            // 🔑 SI NO HAY PROYECTO ACTIVO, USA EL PRIMERO
             if (!activeProjectId) {
                 activeProjectId = projects[0].id;
                 loadKanbanBoard(activeProjectId);
@@ -76,20 +48,12 @@ function loadProjects() {
                     <button class="project-menu">
                         <i class="fas fa-ellipsis-h"></i>
                     </button>
-
                     <div class="project-actions">
-                        <button class="btn btn-sm btn-danger"
-                            onclick="deleteProject('${project.id}')">
-                            Eliminar
-                        </button>
-                        <button class="btn btn-sm btn-light"
-                            onclick="closeActions(this)">
-                            Cancelar
-                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteProject('${project.id}')">Eliminar</button>
+                        <button class="btn btn-sm btn-light" onclick="closeActions(this)">Cancelar</button>
                     </div>
                 `;
 
-                // CLICK → cambiar proyecto
                 item.querySelector('.project-name').onclick = () => {
                     activeProjectId = project.id;
                     loadKanbanBoard(project.id);
@@ -106,30 +70,31 @@ function loadProjects() {
         });
 }
 
-
-function closeFlip(btn) {
-    const card = btn.closest('.project-card');
-    card.style.transform = 'rotateY(0deg)';
-}
-
-
-
-
-function updateActiveProject(projectId) {
-    document.querySelectorAll('#project-list .list-group-item')
+function highlightActiveProject() {
+    document.querySelectorAll('.project-item')
         .forEach(i => i.classList.remove('active'));
 
-    document.getElementById(projectId)?.classList.add('active');
+    const active = document.querySelector(`.project-item[data-id="${activeProjectId}"]`);
+    if (active) active.classList.add('active');
 }
 
-/* =========================
-   TABLERO
-========================= */
+function toggleActions(item) {
+    document.querySelectorAll('.project-item')
+        .forEach(i => i.classList.remove('show-actions'));
+
+    item.classList.add('show-actions');
+}
+
+function closeActions(btn) {
+    btn.closest('.project-item').classList.remove('show-actions');
+}
+
+// =========================
+// TABLERO
+// =========================
 
 function loadKanbanBoard(projectId) {
-    currentProject = projectId;
-
-    fetch(`data-${projectId}.json`)
+    fetch(`data-${projectId}.json?v=` + Date.now())
         .then(res => res.json())
         .then(data => {
             ['todo', 'inprogress', 'done'].forEach(id => {
@@ -138,24 +103,19 @@ function loadKanbanBoard(projectId) {
 
             for (let columnId in data) {
                 const column = document.getElementById(columnId);
-
                 data[columnId].forEach(card => {
-                    const cardEl = createCardElement(
-                        card.text,
-                        card.assignee,
-                        card.description
-                    );
+                    const cardEl = createCardElement(card.text, card.assignee, card.description);
                     column.appendChild(cardEl);
                 });
             }
 
-            updateActiveProject(projectId);
+            highlightActiveProject();
         });
 }
 
-/* =========================
-   CREAR / EDITAR (MODAL)
-========================= */
+// =========================
+// MODAL TAREA
+// =========================
 
 function addCard(columnId) {
     currentColumn = columnId;
@@ -163,7 +123,6 @@ function addCard(columnId) {
 
     document.getElementById('taskModalTitle').innerText = 'Nueva tarea';
     document.getElementById('taskForm').reset();
-
     $('#taskModal').modal('show');
 }
 
@@ -171,25 +130,46 @@ function editTask(button) {
     editingCard = button.closest('.kanban-card');
 
     document.getElementById('taskModalTitle').innerText = 'Editar tarea';
-    document.getElementById('taskTitle').value =
-        editingCard.querySelector('.card-text').innerText;
+    document.getElementById('taskTitle').value = editingCard.querySelector('.card-text').innerText;
 
-    document.getElementById('taskDescription').value =
-        editingCard.querySelector('.card-description').innerText === 'Sin descripción'
-            ? ''
-            : editingCard.querySelector('.card-description').innerText;
+    const desc = editingCard.querySelector('.card-description').innerText;
+    document.getElementById('taskDescription').value = desc === 'Sin descripción' ? '' : desc;
 
-    document.getElementById('taskAssignee').value =
-        editingCard.querySelector('.assignee').innerText
-            .replace(/Asignado:? ?a?:?/gi, '')
-            .trim();
+    document.getElementById('taskAssignee').value = editingCard.querySelector('.assignee').innerText
+        .replace(/Asignado:? ?a?:?/gi, '')
+        .trim();
 
     $('#taskModal').modal('show');
 }
 
-/* =========================
-   CARD
-========================= */
+function saveTaskFromModal() {
+    const title = document.getElementById('taskTitle').value.trim();
+    const description = document.getElementById('taskDescription').value.trim();
+    const assignee = document.getElementById('taskAssignee').value.trim();
+
+    if (!title) {
+        alert('El título es obligatorio');
+        return;
+    }
+
+    if (editingCard) {
+        editingCard.querySelector('.card-text').innerText = title;
+        editingCard.querySelector('.card-description').innerText = description || 'Sin descripción';
+        editingCard.querySelector('.assignee').innerHTML = assignee
+            ? `<span class="badge badge-warning text-white">Asignado a: ${assignee}</span>`
+            : '';
+    } else {
+        const card = createCardElement(title, assignee, description);
+        document.getElementById(currentColumn).appendChild(card);
+    }
+
+    $('#taskModal').modal('hide');
+    saveCards();
+}
+
+// =========================
+// CARD
+// =========================
 
 function createCardElement(text, assignee = '', description = 'Sin descripción') {
     const card = document.createElement('div');
@@ -199,25 +179,13 @@ function createCardElement(text, assignee = '', description = 'Sin descripción'
 
     card.innerHTML = `
         <div class="card-text">${text}</div>
-
-        <div class="card-description">
-            ${description || 'Sin descripción'}
-        </div>
-
+        <div class="card-description">${description || 'Sin descripción'}</div>
         <div class="assignee">
-            ${assignee
-            ? `<span class="badge badge-warning text-white">Asignado a: ${assignee}</span>`
-            : ''
-        }
+            ${assignee ? `<span class="badge badge-warning text-white">Asignado a: ${assignee}</span>` : ''}
         </div>
-
-        <div class="mt-2">
-            <button class="btn btn-sm btn-info" onclick="editTask(this)">
-                <i class="fas fa-edit"></i>
-            </button>
-            <button class="btn btn-sm btn-danger" onclick="deleteTask(this)">
-                <i class="fas fa-trash"></i>
-            </button>
+        <div class="mt-2 text-right">
+            <button class="btn btn-sm btn-info" onclick="editTask(this)"><i class="fas fa-edit"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="deleteTask(this)"><i class="fas fa-trash"></i></button>
         </div>
     `;
 
@@ -225,29 +193,21 @@ function createCardElement(text, assignee = '', description = 'Sin descripción'
     return card;
 }
 
-/* =========================
-   GUARDAR (MODAL)
-========================= */
-
-
-
-/* =========================
-   ELIMINAR
-========================= */
-
 function deleteTask(button) {
     if (!confirm('¿Eliminar esta tarea?')) return;
     button.closest('.kanban-card').remove();
     saveCards();
 }
 
-/* =========================
-   DRAG & DROP
-========================= */
+// =========================
+// DRAG & DROP
+// =========================
 
-function allowDrop(ev) {
-    ev.preventDefault();
-}
+document.querySelectorAll('.kanban-cards').forEach(col => {
+    col.addEventListener('dragover', e => e.preventDefault());
+    col.addEventListener('drop', drop);
+});
+
 
 function drag(ev) {
     ev.dataTransfer.setData('text', ev.target.id);
@@ -267,12 +227,9 @@ function drop(ev) {
     saveCards();
 }
 
-document.addEventListener('dragover', allowDrop);
-document.addEventListener('drop', drop);
-
-/* =========================
-   PERSISTENCIA
-========================= */
+// =========================
+// PERSISTENCIA
+// =========================
 
 function saveCards() {
     const columns = document.getElementsByClassName('kanban-cards');
@@ -280,28 +237,25 @@ function saveCards() {
 
     for (let column of columns) {
         const columnId = column.id;
-
         for (let card of column.children) {
             data[columnId].push({
                 text: card.querySelector('.card-text').innerText,
                 description: card.querySelector('.card-description').innerText,
-                assignee: card.querySelector('.assignee').innerText
-                    .replace(/Asignado:? ?a?:?/gi, '')
-                    .trim()
+                assignee: card.querySelector('.assignee').innerText.replace(/Asignado:? ?a?:?/gi, '').trim()
             });
         }
     }
 
-    fetch(`save.php?project=${currentProject}`, {
+    fetch(`save.php?project=${activeProjectId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
     });
 }
 
-/* =========================
-   UTIL
-========================= */
+// =========================
+// UTIL
+// =========================
 
 function generateId() {
     return 'card-' + Math.random().toString(36).substr(2, 9);
@@ -314,94 +268,54 @@ function openProjectModal() {
 
 function saveProject() {
     const name = document.getElementById('projectName').value.trim();
-    if (!name) {
-        alert('El nombre del proyecto es obligatorio');
-        return;
-    }
+    if (!name) return alert('El nombre del proyecto es obligatorio');
 
     const id = 'project-' + Date.now();
 
     fetch('projects.json')
-        .then(res => {
-            if (!res.ok) throw new Error('No se pudo leer projects.json');
-            return res.json();
-        })
+        .then(res => res.json())
         .then(projects => {
-            if (!Array.isArray(projects)) projects = [];
-
             projects.push({ id, name });
-
             return fetch('save-projects.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(projects)
             });
         })
-        .then(res => {
-            if (!res.ok) throw new Error('No se pudo guardar projects.json');
-
-            return fetch(`save.php?project=${id}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ todo: [], inprogress: [], done: [] })
-            });
-        })
+        .then(() => fetch(`save.php?project=${id}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ todo: [], inprogress: [], done: [] })
+        }))
         .then(() => {
             $('#projectModal').modal('hide');
+            activeProjectId = id;
             loadProjects();
-        })
-        .catch(err => {
-            console.error(err);
-            alert('Error creando el proyecto. Revisa consola.');
         });
 }
 
 function deleteProject(projectId) {
     if (!confirm('¿Eliminar este proyecto y todas sus tareas?')) return;
 
-    fetch('projects.json?v=' + Date.now())
+    fetch('projects.json')
         .then(res => res.json())
-        .then(projects => {
-            const filtered = projects.filter(p => p.id !== projectId);
-
-            return fetch('save-projects.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(filtered)
-            });
-        })
+        .then(projects => projects.filter(p => p.id !== projectId))
+        .then(filtered => fetch('save-projects.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(filtered)
+        }))
+        .then(() => fetch(`delete-project.php?project=${projectId}`))
         .then(() => {
-            return fetch(`delete-project.php?project=${projectId}`);
-        })
-        .then(() => {
-            currentProject = '';
+            activeProjectId = null;
             loadProjects();
         });
 }
 
-function toggleActions(item) {
-    document.querySelectorAll('.project-item')
-        .forEach(i => i.classList.remove('show-actions'));
+// =========================
+// UI
+// =========================
 
-    item.classList.add('show-actions');
-}
-
-function closeActions(btn) {
-    btn.closest('.project-item').classList.remove('show-actions');
-}
-
-function highlightActiveProject() {
-    document.querySelectorAll('.project-item')
-        .forEach(i => i.classList.remove('active'));
-
-    const active = document.querySelector(
-        `.project-item[data-id="${activeProjectId}"]`
-    );
-
-    if (active) active.classList.add('active');
-}
-
-$("#sidebar-close").on("click", function () {
-    $("#wrapper").removeClass("toggled");
+$('#sidebar-close').on('click', () => {
+    $('#wrapper').removeClass('toggled');
 });
-

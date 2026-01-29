@@ -16,9 +16,15 @@ if (!isset($_SESSION['username'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kanban Board</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="kanban.css">
+    <!-- Bootstrap 5 (una sola versión) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Tu CSS con anti-cache -->
+    <link rel="stylesheet" href="kanban.css?v=<?= time() ?>">
+
 </head>
 
 <body>
@@ -100,10 +106,15 @@ if (!isset($_SESSION['username'])) {
     </div>
     <!-- /#wrapper -->
 
+    <!-- jQuery (necesario porque tu JS lo usa) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="kanban.js"></script>
+
+    <!-- Bootstrap 5 bundle (incluye Popper) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Tu JS con anti-cache -->
+    <script src="kanban.js?v=<?= time() ?>"></script>
+
     <script>
         $(document).ready(function() {
 
@@ -129,9 +140,7 @@ if (!isset($_SESSION['username'])) {
 
                 <div class="modal-header border-0">
                     <h5 class="modal-title" id="taskModalTitle">Nueva tarea</h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span>&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
 
                 <div class="modal-body">
@@ -158,8 +167,8 @@ if (!isset($_SESSION['username'])) {
                 </div>
 
                 <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-light" data-dismiss="modal">
-                        Cancelar
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+                    Cancelar
                     </button>
                     <button type="button" class="btn btn-primary" id="saveTaskBtn">
                         Guardar
@@ -176,8 +185,8 @@ if (!isset($_SESSION['username'])) {
 
                 <div class="modal-header border-0">
                     <h5 class="modal-title">Nuevo proyecto</h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span>&times;</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <span>&times;</span>
                     </button>
                 </div>
 
