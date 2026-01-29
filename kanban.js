@@ -48,8 +48,19 @@ function loadProjects() {
     fetch('projects.json?v=' + Date.now())
         .then(res => res.json())
         .then(projects => {
+
             const list = document.getElementById('project-list');
             list.innerHTML = '';
+
+            if (projects.length === 0) {
+                return; // no hay proyectos
+            }
+
+            // 🔑 SI NO HAY PROYECTO ACTIVO, USA EL PRIMERO
+            if (!activeProjectId) {
+                activeProjectId = projects[0].id;
+                loadKanbanBoard(activeProjectId);
+            }
 
             projects.forEach(project => {
                 const item = document.createElement('div');
@@ -62,7 +73,7 @@ function loadProjects() {
 
                 item.innerHTML = `
                     <span class="project-name">${project.name}</span>
-                    <button class="project-menu" title="Opciones">
+                    <button class="project-menu">
                         <i class="fas fa-ellipsis-h"></i>
                     </button>
 
@@ -78,14 +89,13 @@ function loadProjects() {
                     </div>
                 `;
 
-                // seleccionar proyecto
+                // CLICK → cambiar proyecto
                 item.querySelector('.project-name').onclick = () => {
                     activeProjectId = project.id;
                     loadKanbanBoard(project.id);
                     highlightActiveProject();
                 };
 
-                // mostrar acciones
                 item.querySelector('.project-menu').onclick = (e) => {
                     e.stopPropagation();
                     toggleActions(item);
@@ -95,6 +105,7 @@ function loadProjects() {
             });
         });
 }
+
 
 function closeFlip(btn) {
     const card = btn.closest('.project-card');
