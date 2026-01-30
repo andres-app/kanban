@@ -31,6 +31,7 @@
                         <input
                             type="text"
                             name="username"
+                            value="admin"
                             class="form-control form-control-lg"
                             required
                             autofocus
@@ -43,6 +44,7 @@
                         <input
                             type="password"
                             name="password"
+                            value="admin"
                             class="form-control form-control-lg"
                             placeholder="••••••••"
                             required

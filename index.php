@@ -89,17 +89,17 @@ if (!isset($_SESSION['username'])) {
             <div class="container-fluid mt-4">
                 <div class="row kanban-row flex-nowrap flex-md-wrap">
                     <div class="col-12 col-md-6 col-lg-4 kanban-col">
-                        <h4>Pendientes</h4>
+                        <h4 class="text-center">PENDIENTES</h4>
                         <div class="kanban-cards" id="todo"></div>
                     </div>
 
                     <div class="col-12 col-md-6 col-lg-4 kanban-col">
-                        <h4>En Progreso</h4>
+                        <h4 class="text-center">EN PROGRESO</h4>
                         <div class="kanban-cards" id="inprogress"></div>
                     </div>
 
                     <div class="col-12 col-md-6 col-lg-4 kanban-col">
-                        <h4>Terminado</h4>
+                        <h4 class="text-center">TERMINADO</h4>
                         <div class="kanban-cards" id="done"></div>
                     </div>
                 </div>
